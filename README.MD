@@ -11,6 +11,7 @@ pip install -r requirements.txt
 ```
 ```
 将db_config_default.py 改成db_config.py并配置相关信息
+```
 ### 运行
 ```
 python spider.py http://www.***.com
