@@ -15,8 +15,6 @@ class UrlAnalyse:
 
     def analyse(self, table, base_url, response):
         id = response['id']
-        pid = response['pid']
-        url = response['url']
         code = response['code']
         retry = response['retry']
         html = response['html']
@@ -36,7 +34,7 @@ class UrlAnalyse:
                     }
                     db_connect().insert(table, sql_data)
                     db_connect().commit()
-            html_escaped = MySQLdb.escape_string(html.encode('utf-8'))
+            html_escaped = MySQLdb.escape_string(self.pretty_html(html.encode('utf-8')))
             sql_data = {
                 'is_crawed': 1,
                 'code': code,
@@ -69,10 +67,11 @@ class UrlAnalyse:
             try:
                 url = url['href']
                 # 如果是以/开头的url，则此url是需要爬取的url
-                if url[0:1] == '/':
-                    needed_urls.append(base_url + url)
+                href = url.lower()
+                url_parse = urlparse(href)
+                if not url_parse.netloc:
+                    needed_urls.append(base_url + '/' + url.lstrip('/'))
                 else:
-                    href = url.lower()
                     url_parse = urlparse(href)
                     if url_parse.scheme:
                         new_base_url = url_parse.scheme + '://' + url_parse.netloc
@@ -84,7 +83,11 @@ class UrlAnalyse:
                 pass
         return needed_urls
 
-
+    # 优化html文件
+    def pretty_html(self, html):
+        bs_obj = BeautifulSoup(html, 'html.parser', from_encoding='utf8')
+        pretty_html = bs_obj.prettify()
+        return pretty_html
 
 
 

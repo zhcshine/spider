@@ -21,15 +21,7 @@ class Initialization:
         # 数据表名称
         url_parse = urlparse(self.url)
         table = url_parse.netloc.replace('.', '_') + '_urls'
-        sql = 'CREATE TABLE IF NOT EXISTS `{}` ( ' \
-              '`id` INT(11) NOT NULL AUTO_INCREMENT , ' \
-              '`pid` INT(11) NOT NULL  , ' \
-              '`url` VARCHAR(300) NULL DEFAULT NULL , ' \
-              '`is_crawed` INT(1) NOT NULL , ' \
-              '`retry` INT(1) NOT NULL DEFAULT 5, ' \
-              '`code` VARCHAR(100) NULL DEFAULT NULL , ' \
-              '`html` longtext NULL DEFAULT NULL , ' \
-              'PRIMARY KEY (`id`)) ENGINE = InnoDB'.format(table)
+        sql = 'CREATE TABLE `{}` ( `id` INT(11) NOT NULL AUTO_INCREMENT , `pid` INT(11) NOT NULL , `url` VARCHAR(300) NOT NULL , `is_crawed` INT(1) NOT NULL , `retry` INT(1) NOT NULL , `code` VARCHAR(100) NULL DEFAULT NULL , `html` LONGTEXT NULL DEFAULT NULL , PRIMARY KEY (`id`), INDEX (`pid`), INDEX (`url`), INDEX (`is_crawed`)) ENGINE = InnoDB;'.format(table)
         try:
             db_connect().cur.execute(sql)
         except MySQLdb.Error as e:
