@@ -20,7 +20,7 @@ class Initialization:
     def initialization_create_table(self, base_url):
         # 数据表名称
         url_parse = urlparse(self.url)
-        table = url_parse.netloc.replace('.', '_') + '_urls'
+        table = url_parse.netloc.replace('.', '_').replace('-', '_') + '_urls'
         sql = 'CREATE TABLE `{}` ( `id` INT(11) NOT NULL AUTO_INCREMENT , `pid` INT(11) NOT NULL , `url` VARCHAR(300) NOT NULL , `is_crawed` INT(1) NOT NULL , `retry` INT(1) NOT NULL , `code` VARCHAR(100) NULL DEFAULT NULL , `html` LONGTEXT NULL DEFAULT NULL , PRIMARY KEY (`id`), INDEX (`pid`), INDEX (`url`), INDEX (`is_crawed`)) ENGINE = InnoDB;'.format(table)
         try:
             db_connect().cur.execute(sql)
@@ -34,7 +34,7 @@ class Initialization:
                 'pid': 0,
                 'url': base_url,
                 'is_crawed': 0,
-                'retry': 5
+                'retry': 3
             }
             db_connect().insert(table, sql_data)
             db_connect().commit()

@@ -1,14 +1,13 @@
 # -*- encoding: utf8 -*-
 import sys
-import urllib2
 import cookielib
 sys.path.append('..')
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
-
 class UrlCraw:
-    def __init__(self):
+    def __init__(self, proxy):
+        self.proxy = proxy
         pass
 
     def get_agent(self):
@@ -20,6 +19,16 @@ class UrlCraw:
         pid = url_recode['pid']
         url = url_recode['url']
         retry = url_recode['retry']
+        proxy = self.proxy
+        # if proxy['type'] == 'socks5':
+        #     import socks
+        #     import socket
+        #     print 'proxy'
+        #     socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, "127.0.0.1", 1080)
+        #     socket.socket = socks.socksocket
+        import urllib2
+        # if proxy['type'] == 'http':
+        #     proxy_handler = urllib2.ProxyHandler({"http": '127.0.0.1:1080'})
         cj = cookielib.CookieJar()
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
         urllib2.install_opener(opener)
