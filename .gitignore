@@ -1,0 +1,8 @@
+# Created by .ignore support plugin (hsz.mobi)
+bin
+include
+lib
+local
+share
+db_config.py
+.idea
