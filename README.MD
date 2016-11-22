@@ -1,12 +1,14 @@
 ### 爬取指定网站的全部内容
 
+
 ### 环境
 > mysql
 > python2.7
 
 ### 安装
-
 ```
+git cloud https://github.com/zhcshine/spider.git
+virtualenv --no-site-packages -p /usr/local/bin/python .
 pip install -r requirements.txt
 ```
 ```

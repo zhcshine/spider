@@ -90,7 +90,7 @@ class UrlAnalyse:
                 href = self.url_filter(href, filter_params=filter_params, filter_query=filter_query)
                 url_parse = urlparse.urlparse(href)
                 if not url_parse.netloc:
-                    needed_urls.append(base_url + '/' + url.lstrip('/'))
+                    needed_urls.append(base_url + '/' + href.lstrip('/'))
                 else:
                     if url_parse.scheme:
                         new_base_url = url_parse.scheme + '://' + url_parse.netloc
