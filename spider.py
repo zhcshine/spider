@@ -20,12 +20,13 @@ spider_config = spider_config()
 proxy = spider_config['proxy']
 
 """ 引入调度器，爬取器，分析器"""
-url_manager =  UrlManager.UrlManager()
+has_craw_url = UrlManager.UrlManager()
+url_manager = UrlManager.UrlManager()
 url_craw = UrlCraw.UrlCraw(proxy)
 url_analyse = UrlAnalyse.UrlAnalyse()
 
 """ 开始循环爬取 """
-while url_manager.get_one_url(table=table):
+while has_craw_url.has_craw_url(table=table):
     print u'************************************'
     time_begin = datetime.datetime.now()
     url_recode = url_manager.get_one_url(table=table)

@@ -30,6 +30,7 @@ class MysqlConnect:
                 passwd=self.password,
                 db=self.database
             )
+            self.conn.ping(True)
             self.conn.autocommit(False)
             self.conn.set_character_set(self.charset)
             self.cur = self.conn.cursor()

@@ -2,7 +2,8 @@
 import sys
 import MySQLdb
 from mysql_connect import db_connect
-from urlparse import urlparse
+import urlparse
+import spider_config
 sys.path.append('..')
 reload(sys)
 from bs4 import BeautifulSoup
@@ -11,6 +12,7 @@ sys.setdefaultencoding("utf-8")
 
 class UrlAnalyse:
     def __init__(self):
+        self.spider_config = spider_config.spider_config()
         pass
 
     def analyse(self, table, base_url, response):
@@ -82,7 +84,11 @@ class UrlAnalyse:
                 url = url['href']
                 # 如果是以/开头的url，则此url是需要爬取的url
                 href = url.lower()
-                url_parse = urlparse(href)
+                spider_config = self.spider_config
+                filter_params = spider_config['filter_params']
+                filter_query = spider_config['filter_query']
+                href = self.url_filter(href, filter_params=filter_params, filter_query=filter_query)
+                url_parse = urlparse.urlparse(href)
                 if not url_parse.netloc:
                     needed_urls.append(base_url + '/' + url.lstrip('/'))
                 else:
@@ -104,5 +110,32 @@ class UrlAnalyse:
         pretty_html = bs_obj.prettify()
         return pretty_html
 
+    # 过滤url的输入参数
+    def url_filter(self, url, filter_params, filter_query):
+        url_parse = urlparse.urlparse(url)
+        url_scheme = url_parse.scheme
+        url_netloc = url_parse.netloc
+        url_path = url_parse.path
+        url_params = url_parse.params
+        url_query = url_parse.query
+        url_fragment = url_parse.fragment
+        # 删除指定输入参数
+        url_params_list = url_params.split(';')
+        for params in filter_params:
+            for url_params in url_params_list:
+                url_params_list_list = url_params.split('=')
+                if params in url_params_list_list:
+                    url_params_list.remove(url_params)
+        new_url_params = ';'.join(url_params_list)
+        # 删除指定查询参数
+        url_query_list = url_query.split('&')
+        for query in filter_query:
+            for url_query in url_query_list:
+                url_query_list_list = url_query.split('=')
+                if query in url_query_list_list:
+                    url_query_list.remove(url_query)
+        new_url_query = '&'.join(url_query_list)
+        new_url = urlparse.urlunparse((url_scheme, url_netloc, url_path, new_url_params, new_url_query, url_fragment))
+        return new_url
 
 
