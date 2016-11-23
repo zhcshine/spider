@@ -10,7 +10,7 @@ def spider_config():
             'password': '',
         },
         # 过滤url输入参数
-        'filter_params': [],
+        'filter_params': ['jsessionid', ],
         # 过滤url查询参数
         'filter_query': [],
     }

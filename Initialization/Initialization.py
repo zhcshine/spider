@@ -32,7 +32,7 @@ class Initialization:
         if results == 0:
             sql_data = {
                 'pid': 0,
-                'url': base_url,
+                'url': self.url,
                 'is_crawed': 0,
                 'retry': 3
             }

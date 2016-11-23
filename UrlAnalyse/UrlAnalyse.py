@@ -83,11 +83,10 @@ class UrlAnalyse:
             try:
                 url = url['href']
                 # 如果是以/开头的url，则此url是需要爬取的url
-                href = url.lower()
                 spider_config = self.spider_config
                 filter_params = spider_config['filter_params']
                 filter_query = spider_config['filter_query']
-                href = self.url_filter(href, filter_params=filter_params, filter_query=filter_query)
+                href = self.url_filter(url, filter_params=filter_params, filter_query=filter_query)
                 url_parse = urlparse.urlparse(href)
                 if not url_parse.netloc:
                     needed_urls.append(base_url + '/' + href.lstrip('/'))
