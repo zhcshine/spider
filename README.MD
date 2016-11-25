@@ -1,4 +1,4 @@
-### 爬取指定网站的全部内容
+### 简易爬取指定网站的全部内容
 
 
 ### 环境
@@ -8,11 +8,13 @@
 ### 安装
 ```
 git cloud https://github.com/zhcshine/spider.git
+# -p参数为指定的python版本，根据自己实际情况进行选择
 virtualenv --no-site-packages -p /usr/local/bin/python .
 pip install -r requirements.txt
 ```
 ```
 将db_config_default.py 改成db_config.py并配置相关信息
+将spider_config_default.py 改成spider_config.py并配置相关信息
 ```
 ### 运行
 ```
