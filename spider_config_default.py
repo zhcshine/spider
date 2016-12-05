@@ -1,6 +1,8 @@
 # -*- encoding: utf8 -*-
 def spider_config():
     config = {
+        # 设置超时时长
+        'timeout': 10,
         # 代理设置
         'proxy': {
             'type': '',  # 支持socks5

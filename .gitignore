@@ -7,3 +7,4 @@ share
 db_config.py
 spider_config.py
 .idea
+nohup.out

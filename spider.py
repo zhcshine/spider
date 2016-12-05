@@ -22,7 +22,7 @@ proxy = spider_config['proxy']
 """ 引入调度器，爬取器，分析器"""
 has_craw_url = UrlManager.UrlManager()
 url_manager = UrlManager.UrlManager()
-url_craw = UrlCraw.UrlCraw(proxy)
+url_craw = UrlCraw.UrlCraw()
 url_analyse = UrlAnalyse.UrlAnalyse()
 
 """ 开始循环爬取 """

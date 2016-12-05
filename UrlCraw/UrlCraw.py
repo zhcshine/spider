@@ -2,13 +2,14 @@
 import sys
 import cookielib
 import urllib2
+import spider_config
 sys.path.append('..')
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
 class UrlCraw:
-    def __init__(self, proxy):
-        self.proxy = proxy
+    def __init__(self):
+        self.spider_config = spider_config.spider_config()
         pass
 
     def get_agent(self):
@@ -20,7 +21,8 @@ class UrlCraw:
         pid = url_recode['pid']
         url = url_recode['url']
         retry = url_recode['retry']
-        proxy = self.proxy
+        proxy = self.spider_config['proxy']
+        timeout = self.spider_config['timeout']
         if proxy['type'] == 'socks5':
             import socks
             import socket
@@ -34,7 +36,7 @@ class UrlCraw:
         request = urllib2.Request(accessed_url)
         request.add_header('user-agent', self.get_agent())
         try:
-            response = urllib2.urlopen(request)
+            response = urllib2.urlopen(request, timeout=timeout)
             response_result = {
                 'id': id,
                 'pid': pid,
