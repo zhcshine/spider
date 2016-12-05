@@ -11,7 +11,7 @@ class UrlManager:
         pass
 
     def has_craw_url(self, table):
-        sql = 'SELECT id, pid, url, is_crawed, retry, code FROM {} WHERE is_crawed LIKE 0'.format(table)
+        sql = 'SELECT id, pid, url, is_crawed, retry, code FROM {} WHERE is_crawed = 0'.format(table)
         results = db_connect().query(sql)
         if results == 0:
             print u'没有需要爬取的url了，即将退出程序'
@@ -20,7 +20,7 @@ class UrlManager:
             return 1
 
     def get_one_url(self, table):
-        sql = 'SELECT id, pid, url, is_crawed, retry, code FROM {} WHERE is_crawed LIKE 0'.format(table)
+        sql = 'SELECT id, pid, url, is_crawed, retry, code FROM {} WHERE is_crawed = 0'.format(table)
         results = db_connect().query(sql)
         if results == 0:
             print u'没有需要爬取的url了，即将退出程序'

@@ -26,7 +26,7 @@ class UrlAnalyse:
                 new_urls = self.get_urls(html, base_url)
                 # 判断是否重复，重复则丢弃，不重复则写入数据库
                 for new_url in new_urls:
-                    sql = 'SELECT id, url FROM {} WHERE url LIKE \'{}\''.format(table, new_url)
+                    sql = 'SELECT id, url FROM {} WHERE url = \'{}\''.format(table, new_url)
                     results = db_connect().query(sql)
                     if results == 0:
                         sql_data = {
