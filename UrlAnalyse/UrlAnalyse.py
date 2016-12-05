@@ -74,6 +74,33 @@ class UrlAnalyse:
             db_connect().update(table, sql_data, condition)
             db_connect().commit()
 
+    def id_spider_analyse(self, table, response):
+        id = response['id']
+        code = response['code']
+        html = response['html']
+        try:
+            html_escaped = MySQLdb.escape_string(self.pretty_html(html.encode('utf-8')))
+        except:
+            html_escaped = html
+        sql_data = {
+            'is_crawed': 1,
+            'code': code,
+            'html': html_escaped
+        }
+        condition = 'id = {}'.format(id)
+        try:
+            db_connect().update(table, sql_data, condition)
+            db_connect().commit()
+        except Exception, e:
+            sql_data = {
+                'is_crawed': 1,
+                'code': 800,
+                'html': 'analyseError'  # str(e)
+            }
+            condition = 'id = {}'.format(id)
+            db_connect().update(table, sql_data, condition)
+            db_connect().commit()
+
 
     def get_urls(self, html, base_url):
         bs_obj = BeautifulSoup(html, 'html.parser', from_encoding='utf8')

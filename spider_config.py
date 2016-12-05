@@ -2,7 +2,7 @@
 def spider_config():
     config = {
         # 设置超时时长
-        'timeout': 10,
+        'timeout': 120,
         # 代理设置
         'proxy': {
             'type': 'socks5',
