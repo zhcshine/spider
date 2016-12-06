@@ -1,7 +1,8 @@
 # -*- encoding: utf8 -*-
 import sys
+import db_config
+import ConnectDatabase.MysqlConnect as MysqlConnect
 import MySQLdb
-from mysql_connect import db_connect
 import urlparse
 import spider_config
 sys.path.append('..')
@@ -13,7 +14,10 @@ sys.setdefaultencoding("utf-8")
 class UrlAnalyse:
     def __init__(self):
         self.spider_config = spider_config.spider_config()
-        pass
+        """ 配置mysql连接 """
+        connect_config = db_config.connect_config()
+        mysql_config = connect_config['mysql']
+        self.mysql_connect = MysqlConnect.MysqlConnect(mysql_config)
 
     def analyse(self, table, base_url, response):
         id = response['id']
@@ -27,7 +31,7 @@ class UrlAnalyse:
                 # 判断是否重复，重复则丢弃，不重复则写入数据库
                 for new_url in new_urls:
                     sql = 'SELECT id, url FROM {} WHERE url = \'{}\''.format(table, new_url)
-                    results = db_connect().query(sql)
+                    results = self.mysql_connect.query(sql)
                     if results == 0:
                         sql_data = {
                             'pid': id,
@@ -35,8 +39,8 @@ class UrlAnalyse:
                             'is_crawed': 0,
                             'retry': 3,
                         }
-                        db_connect().insert(table, sql_data)
-                        db_connect().commit()
+                        self.mysql_connect.insert(table, sql_data)
+                        self.mysql_connect.commit()
                 try:
                     html_escaped = MySQLdb.escape_string(self.pretty_html(html.encode('utf-8')))
                 except:
@@ -62,8 +66,8 @@ class UrlAnalyse:
                         'html': html
                     }
             condition = 'id = {}'.format(id)
-            db_connect().update(table, sql_data, condition)
-            db_connect().commit()
+            self.mysql_connect.update(table, sql_data, condition)
+            self.mysql_connect.commit()
         except Exception, e:
             sql_data = {
                 'is_crawed': 1,
@@ -71,8 +75,8 @@ class UrlAnalyse:
                 'html': 'analyseError'  # str(e)
             }
             condition = 'id = {}'.format(id)
-            db_connect().update(table, sql_data, condition)
-            db_connect().commit()
+            self.mysql_connect.update(table, sql_data, condition)
+            self.mysql_connect.commit()
 
     def id_spider_analyse(self, table, response):
         id = response['id']
@@ -89,8 +93,8 @@ class UrlAnalyse:
         }
         condition = 'id = {}'.format(id)
         try:
-            db_connect().update(table, sql_data, condition)
-            db_connect().commit()
+            self.mysql_connect.update(table, sql_data, condition)
+            self.mysql_connect.commit()
         except Exception, e:
             sql_data = {
                 'is_crawed': 1,
@@ -98,8 +102,8 @@ class UrlAnalyse:
                 'html': 'analyseError'  # str(e)
             }
             condition = 'id = {}'.format(id)
-            db_connect().update(table, sql_data, condition)
-            db_connect().commit()
+            self.mysql_connect.update(table, sql_data, condition)
+            self.mysql_connect.commit()
 
 
     def get_urls(self, html, base_url):
