@@ -1,10 +1,7 @@
 # -*- encoding: utf8 -*-
 import sys
-import db_config
-import ConnectDatabase.MysqlConnect as MysqlConnect
-import MySQLdb
 import urlparse
-import spider_config
+import MySQLdb
 sys.path.append('..')
 reload(sys)
 from bs4 import BeautifulSoup
@@ -12,12 +9,9 @@ sys.setdefaultencoding("utf-8")
 
 
 class UrlAnalyse:
-    def __init__(self):
-        self.spider_config = spider_config.spider_config()
-        """ 配置mysql连接 """
-        connect_config = db_config.connect_config()
-        mysql_config = connect_config['mysql']
-        self.mysql_connect = MysqlConnect.MysqlConnect(mysql_config)
+    def __init__(self, db, config):
+        self.db = db
+        self.config = config
 
     def analyse(self, table, base_url, response):
         id = response['id']
@@ -31,7 +25,7 @@ class UrlAnalyse:
                 # 判断是否重复，重复则丢弃，不重复则写入数据库
                 for new_url in new_urls:
                     sql = 'SELECT id, url FROM {} WHERE url = \'{}\''.format(table, new_url)
-                    results = self.mysql_connect.query(sql)
+                    results = self.db.query(sql)
                     if results == 0:
                         sql_data = {
                             'pid': id,
@@ -39,8 +33,8 @@ class UrlAnalyse:
                             'is_crawed': 0,
                             'retry': 3,
                         }
-                        self.mysql_connect.insert(table, sql_data)
-                        self.mysql_connect.commit()
+                        self.db.insert(table, sql_data)
+                        self.db.commit()
                 try:
                     html_escaped = MySQLdb.escape_string(self.pretty_html(html.encode('utf-8')))
                 except:
@@ -66,8 +60,8 @@ class UrlAnalyse:
                         'html': html
                     }
             condition = 'id = {}'.format(id)
-            self.mysql_connect.update(table, sql_data, condition)
-            self.mysql_connect.commit()
+            self.db.update(table, sql_data, condition)
+            self.db.commit()
         except Exception, e:
             sql_data = {
                 'is_crawed': 1,
@@ -75,8 +69,8 @@ class UrlAnalyse:
                 'html': 'analyseError'  # str(e)
             }
             condition = 'id = {}'.format(id)
-            self.mysql_connect.update(table, sql_data, condition)
-            self.mysql_connect.commit()
+            self.db.update(table, sql_data, condition)
+            self.db.commit()
 
     def id_spider_analyse(self, table, response):
         id = response['id']
@@ -93,8 +87,8 @@ class UrlAnalyse:
         }
         condition = 'id = {}'.format(id)
         try:
-            self.mysql_connect.update(table, sql_data, condition)
-            self.mysql_connect.commit()
+            self.db.update(table, sql_data, condition)
+            self.db.commit()
         except Exception, e:
             sql_data = {
                 'is_crawed': 1,
@@ -102,8 +96,8 @@ class UrlAnalyse:
                 'html': 'analyseError'  # str(e)
             }
             condition = 'id = {}'.format(id)
-            self.mysql_connect.update(table, sql_data, condition)
-            self.mysql_connect.commit()
+            self.db.update(table, sql_data, condition)
+            self.db.commit()
 
 
     def get_urls(self, html, base_url):
@@ -114,7 +108,7 @@ class UrlAnalyse:
             try:
                 url = url['href']
                 # 如果是以/开头的url，则此url是需要爬取的url
-                spider_config = self.spider_config
+                spider_config = self.config
                 filter_params = spider_config['filter_params']
                 filter_query = spider_config['filter_query']
                 href = self.url_filter(url, filter_params=filter_params, filter_query=filter_query)
@@ -169,3 +163,9 @@ class UrlAnalyse:
         return new_url
 
 
+def main():
+    print u"请传入一条数据库数据"
+
+
+if __name__ == '__main__':
+    main()

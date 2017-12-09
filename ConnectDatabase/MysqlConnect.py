@@ -114,5 +114,6 @@ class MysqlConnect:
 def main():
     print "请初始化配置信息{'server': 'localhost', 'database': 'database', 'username': 'root', 'password': 'password'}"
 
+
 if __name__ == '__main__':
     main()
