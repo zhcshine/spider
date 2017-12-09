@@ -36,7 +36,12 @@ class UrlAnalyse:
                         self.db.insert(table, sql_data)
                         self.db.commit()
                 try:
-                    html_escaped = MySQLdb.escape_string(self.pretty_html(html.encode('utf-8')))
+                    decode_code = self.config['decode']
+                    if decode_code == '':
+                        html = html.encode('utf-8')
+                    else:
+                        html = html.decode(decode_code).encode('utf-8')
+                    html_escaped = MySQLdb.escape_string(self.pretty_html(html))
                 except:
                     html_escaped = html
                 sql_data = {

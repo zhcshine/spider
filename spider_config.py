@@ -22,5 +22,7 @@ def spider_config():
         'filter_params': ['jsessionid', ],
         # 过滤url查询参数
         'filter_query': [],
+        # 目标网站的编码
+        'decode': 'gbk'
     }
     return config
