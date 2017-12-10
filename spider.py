@@ -65,11 +65,14 @@ class Spider:
         self.sprint.print_spending_time('Analyse：', str(excute_time_analyse) + 's')
 
     def spider(self):
-        url_recode = self.get_spider_url()
-        response = self.craw_spider_url(url_recode)
-        self.analyse_spider_result(response)
-        self.sprint.print_line('*')
-        Spider.spider(self)
+        while True:
+            url_recode = self.get_spider_url()
+            if url_recode:
+                response = self.craw_spider_url(url_recode)
+                self.analyse_spider_result(response)
+                self.sprint.print_line('*')
+            else:
+                break
 
 url_argv = sys.argv[1]
 spider = Spider(url_argv)
