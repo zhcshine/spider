@@ -15,6 +15,7 @@ sys.setdefaultencoding("utf-8")
 
 class Spider:
     def __init__(self, url_argv):
+        sys.setrecursionlimit(10000000)
         """ 调度数据库接口, 引入初始化, 调度器, 爬取器, 分析器 """
         self.db = DbManager.DbManager(db_config).mysql_connect()
         self.config = spider_config.spider_config()
