@@ -23,6 +23,8 @@ def spider_config():
         # 过滤url查询参数
         'filter_query': [],
         # 目标网站的编码
-        'decode': 'gbk'
+        'decode': 'gbk',
+        # 设置重复次数
+        'retry': 2
     }
     return config

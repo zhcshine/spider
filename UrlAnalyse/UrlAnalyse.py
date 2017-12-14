@@ -31,7 +31,7 @@ class UrlAnalyse:
                             'pid': id,
                             'url': new_url,
                             'is_crawed': 0,
-                            'retry': 3,
+                            'retry': self.config['retry'],
                         }
                         self.db.insert(table, sql_data)
                         self.db.commit()
@@ -48,6 +48,12 @@ class UrlAnalyse:
                     'is_crawed': 1,
                     'code': code,
                     'html': html_escaped
+                }
+            elif code == 404:
+                sql_data = {
+                    'is_crawed': 1,
+                    'code': code,
+                    'html': html
                 }
             else:
                 if int(retry) > 1:
@@ -70,7 +76,7 @@ class UrlAnalyse:
         except Exception, e:
             sql_data = {
                 'is_crawed': 1,
-                'code': 800,
+                'code': code,
                 'html': 'analyseError'  # str(e)
             }
             condition = 'id = {}'.format(id)

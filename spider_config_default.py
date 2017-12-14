@@ -15,6 +15,7 @@ def spider_config():
         'filter_params': [],
         # 过滤url查询参数
         'filter_query': [],
-        'decode': ''
+        'decode': '',
+        'retry': 3
     }
     return config

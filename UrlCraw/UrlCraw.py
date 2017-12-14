@@ -45,7 +45,27 @@ class UrlCraw:
                 'html': response.read()
             }
             return response_result
-        except Exception, e:
+
+        except urllib2.HTTPError, e:
+            response_result = {
+                'id': id,
+                'pid': pid,
+                'url': url,
+                'code': e.getcode(),
+                'retry': retry,
+                'html': e.read()
+            }
+            return response_result
+        except urllib2.URLError, e:
+            response_result = {
+                'id': id,
+                'pid': pid,
+                'url': url,
+                'code': 700,  # 自定义700为网络错误
+                'retry': retry,
+                'html': e
+            }
+        except Error, e:
             response_result = {
                 'id': id,
                 'pid': pid,
