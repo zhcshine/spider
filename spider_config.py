@@ -22,8 +22,10 @@ def spider_config():
         'filter_params': ['jsessionid', ],
         # 过滤url查询参数
         'filter_query': [],
+        # 过滤包含相关路径的url,　例如search, chaxun等搜索相关
+        'filter_path': [],
         # 目标网站的编码
-        'decode': 'gbk',
+        'decode': '', # gbk, utf-8
         # 设置重复次数
         'retry': 2
     }

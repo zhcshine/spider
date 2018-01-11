@@ -118,6 +118,11 @@ class UrlAnalyse:
         for url in urls_list:
             try:
                 url = url['href']
+                print url
+                # 删除有Javascript的链接
+                if 'javascript' in str(url):
+                    continue
+
                 # 如果是以/开头的url，则此url是需要爬取的url
                 spider_config = self.config
                 filter_params = spider_config['filter_params']
@@ -170,8 +175,10 @@ class UrlAnalyse:
                 if query in url_query_list_list:
                     url_query_list.remove(url_query)
         new_url_query = '&'.join(url_query_list)
-        new_url = urlparse.urlunparse((url_scheme, url_netloc, url_path, new_url_params, new_url_query, url_fragment))
+        new_url = urlparse.urlunparse((url_scheme, url_netloc, url_path, new_url_params, new_url_query, ''))
         return new_url
+
+    # 
 
 
 def main():

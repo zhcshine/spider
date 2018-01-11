@@ -15,6 +15,9 @@ def spider_config():
         'filter_params': [],
         # 过滤url查询参数
         'filter_query': [],
+        # 过滤包含相关路径的url,　例如search, chaxun等搜索相关
+        'filter_path': [],
+        # utf-8/gbk
         'decode': '',
         'retry': 3
     }

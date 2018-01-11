@@ -65,7 +65,7 @@ class UrlCraw:
                 'retry': retry,
                 'html': e
             }
-        except Error, e:
+        except Exception, e:
             response_result = {
                 'id': id,
                 'pid': pid,
